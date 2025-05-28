@@ -1,6 +1,6 @@
 import express from "express"
 import { config } from "dotenv";
-import paymentRouter from "./routes/paymentRoute.js";
+import paymentRouter from "../routes/paymentRoute.js";
 
 const app = express()
 
