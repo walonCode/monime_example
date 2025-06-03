@@ -4,6 +4,7 @@ interface Payment extends Document {
     paymentId: string,
     isCompleted:boolean,
     userId:string | undefined
+    amount:number
 }
 
 const paymentSchmema = new Schema<Payment>({
@@ -17,6 +18,10 @@ const paymentSchmema = new Schema<Payment>({
     },
     userId:{
         type:Schema.Types.ObjectId,
+        required:true
+    },
+    amount:{
+        type:Number,
         required:true
     }
 }, { timestamps:true })
