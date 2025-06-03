@@ -15,7 +15,7 @@ This project is a comprehensive demonstration of a backend service built using T
 1. Clone this repository:
     ```bash
     git clone https://github.com/walonCode/monime_example.git
-    cd learning_docker
+    cd monime_example
     ```
 
 2. Install dependencies:
