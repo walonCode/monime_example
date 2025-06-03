@@ -1,22 +1,26 @@
 import axios from "axios"
 import { CreatePaymentCode } from "../types/type";
+import { config } from "dotenv";
+import {v4 as uuid4} from "uuid"
+
+config()
 
 const spaceId = process.env.MONIME_SPACE_ID || "enter monime_space_id"
 const token = process.env.TOKEN || "enter access token from monime";
 
 
-export default async function createPaymentCode(name:string, amount:number, phoneNumber:string,userId:string):Promise<CreatePaymentCode | undefined> {
+export default async function createPaymentCode(name:string, amount:string, phoneNumber:string,userId:string):Promise<CreatePaymentCode | undefined> {
   const postUrl = "https://api.monime.io/payment-codes";
 
   const bodyData = {
     name: "Premium Payment",
-    mode: "oneTime",
+    mode: "recurrent",
     isActive: true,
     amount: {
       currency: "SLE",
-      value: amount
+      value: Number(amount) * 100
     },
-    duration: "1h30m",
+    duration: "30m",
     customerTarget: {
       name: `${name}`,
       reference: "0123456789",
@@ -30,7 +34,7 @@ export default async function createPaymentCode(name:string, amount:number, phon
     const response = await axios.post(postUrl, bodyData, {
         headers: {
             'Monime-Space-Id': `${spaceId}`,
-            'Idempotency-Key': `${userId}`,
+            'Idempotency-Key': `${userId + uuid4()}`,
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
         }

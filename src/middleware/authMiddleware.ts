@@ -1,17 +1,17 @@
 import { Response, Request, NextFunction } from "express";
 import jwt from "jsonwebtoken"
 
-export default async function(req:Request,res:Response, next:NextFunction){
+export default async function(req:Request,res:Response, next:NextFunction):Promise<void>{
     const token = req.headers["authorization"]
     if(!token){
-        return res.status(401).json({message:"Not authorized"})
+        res.status(401).json({message:"Not authorized"})
     }
-    const tokenValue = token.replace('Bearer ', "" ).trim()
+    const tokenValue = token?.replace('Bearer ', "" ).trim()
     if(!tokenValue){
-        return res.status(401).json({message:"Unauthorized"})
+        res.status(401).json({message:"Unauthorized"})
     }
     try{
-        const decoded = jwt.verify(tokenValue, process.env.JWT_SECRET!) as { id:string, username:string}
+        const decoded = jwt.verify(tokenValue as string, process.env.JWT_SECRET!) as unknown as { id:string, username:string}
         req.user = decoded
         next()
     }catch(err){

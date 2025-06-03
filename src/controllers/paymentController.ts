@@ -1,9 +1,10 @@
 import Payment from "../models/paymentModel";
 import { Response, Request } from "express";
 import createPaymentCode from "../utils/generatePayment";
+import { ConfirmPayment } from "../types/type";
 
 
-export const makePayment = async(req:Request, res:Response) => {
+export const makePayment = async(req:Request, res:Response):Promise<void> => {
     try{
         //getting the user details from req.user
         const user =  req.user
@@ -34,5 +35,31 @@ export const makePayment = async(req:Request, res:Response) => {
     }catch(err){
         console.error(err)
         res.status(500).json({message:"Internal server error"})
+    }
+}
+
+export const confirmPayment = async(req:Request, res:Response):Promise<void> => {
+    try{
+        const { data } = req.body
+        if(!data){
+            res.status(400).json({message:"invalid webhook data"})
+        }
+        console.log(data)
+        
+
+        const paymentData = data as ConfirmPayment
+
+        console.log(paymentData.status)
+
+        if (paymentData.status === "completed"){
+            const payment = await Payment.findOne({paymentId:paymentData.id})
+            payment?.isCompleted === true
+
+            await payment?.save()
+            
+            console.log("payment completed")
+        }
+    }catch(error){
+        console.error(error)
     }
 }

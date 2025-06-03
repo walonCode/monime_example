@@ -4,7 +4,7 @@ export default async function ConnectDB(){
     console.log("Database connection with retry")
     try{
         await mongoose.connect(process.env.DATABASE_URI!,{
-            dbName:"monime test",
+            dbName:"monimeTest",
         })
         console.log("✅ Connected to Database")
     }catch(err){
