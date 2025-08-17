@@ -1,6 +1,6 @@
 import Payment from "../models/paymentModel";
 import { Response, Request } from "express";
-import createPaymentCode from "../utils/generatePayment";
+import { createPaymentCode } from "../utils/generatePayment";
 import { ConfirmPayment } from "../types/type";
 
 
